@@ -1,7 +1,7 @@
 # Chart: Harbor Scanner Adapter for Sysdig Secure
 
 This chart deploys the Harbor Scanner Adapter for Sysdig Secure on your
-Kubernestes cluster.
+Kubernetes cluster.
 
 ## Installing the Chart
 
@@ -16,13 +16,13 @@ $ kubectl create ns harbor-scanner-sysdig-secure
 3. Add Sysdig Helm charts repository:
 
 ```
-$ helm repo add sysdiglabs https://sysdiglabs.github.io/charts/
+$ helm repo add sysdig https://charts.sysdig.com
 ```
 
 4. Deploy the scanner adapter
 
 ```
-$ helm install -n sysdig-admission-controller sysdig-admission-controller -f values.yaml sysdiglabs/sysdig-admission-controller
+$ helm install -n sharbor-scanner-sysdig-secure harbor-scanner-sysdig-secure -f values.yaml sysdig/harbor-scanner-sysdig-secure
 ```
 
 ## Configuration
@@ -52,20 +52,23 @@ Sysdig Secure chart and their default values:
 | `sysdig.secure.apiToken`                      | API Token to access Sysdig Secure. This value is **mandatory**.                                                             | ` `                                       |
 | `sysdig.secure.url`                           | Sysdig Secure endpoint                                                                                                      | `https://secure.sysdig.com`               |
 | `sysdig.secure.verifySSL`                     | Verify SSL certificate when connecting to Sysdig Secure endpoint                                                            | `true`                                    |
+| `proxy.httpProxy`                             | URL of the proxy for HTTP connections, or empty if not using proxy (sets the http_proxy environment variable)               | ` `                                       |
+| `proxy.httpsProxy`                            | URL of the proxy for HTTPS connections, or empty if not using proxy (sets the https_proxy environment variable)             | ` `                                       |
+| `proxy.noProxy`                               | Comma-separated list of domain extensions proxy should not be used for. Include the internal IP of the kubeapi server.      | ` `                                       |
 | `inlineScanning.enabled`                      | Enable Inline Scanning feature                                                                                              | `false`                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helm install --name my-release \
-    --set sysdig.accessKey=YOUR-KEY-HERE,sysdig.settings.tags="role:webserver\,location:europe" \
-    sysdiglabs/sysdig
+$ helm install my-release \
+    --set sysdig.secure.apiToken=YOUR-KEY-HERE \
+    sysdig/harbor-scanner-sysdig-secure
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml sysdiglabs/sysdig
+$ helm install my-release -f values.yaml sysdig/harbor-scanner-sysdig-secure
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://raw.githubusercontent.com/sysdiglabs/charts/master/charts/harbor-scanner-sysdig-secure/values.yaml)
